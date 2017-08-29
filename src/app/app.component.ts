@@ -48,6 +48,10 @@ export class AppComponent {
           break;
       }
       element = window.document.querySelector('#' + color)
-      element.className = 'item ' + color + '-glow'; 
+      element.className = 'item ' + color + '-glow';
+      setTimeout(function() {
+        element.className = 'item';
+      }, 1000);
+      
     }
 }
