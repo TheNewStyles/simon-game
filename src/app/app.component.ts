@@ -23,7 +23,6 @@ export class AppComponent {
       //compare values
       //if values === continue - increment step count - increment pattern count
         //else reset pattern count - step count remains (strict will be different)
-      
     }
 
     private getRandomNumber(max:number) {
