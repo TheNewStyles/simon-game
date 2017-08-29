@@ -60,17 +60,80 @@
     background: #00a74a;
 }
 
+.green-glow {
+    -webkit-animation: greenGlow .5s ease-in-out infinite alternate;
+    -moz-animation: greenGlow .5s ease-in-out infinite alternate;
+    animation: greenGlow .5s ease-in-out infinite alternate;
+}
+
+@keyframes greenGlow {
+    from {
+        background: #00a74a;
+    }
+    to {
+        background: #31CD76;    
+    }
+}
+
 #red {
     background: #9f0f17;
     text-decoration: none;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.red-glow {
+    -webkit-animation: redGlow .5s ease-in-out infinite alternate;
+    -moz-animation: redGlow .5s ease-in-out infinite alternate;
+    animation: redGlow .5s ease-in-out infinite alternate;
+}
+
+@keyframes redGlow {
+    from {       
+        background: #9f0f17;
+    }
+    to {
+        background: #CF232C;    
+    }
 }
 
 #yellow {
     background: #cca707;
 }
 
+.yellow-glow {
+    -webkit-animation: yellowGlow .5s ease-in-out infinite alternate;
+    -moz-animation: yellowGlow .5s ease-in-out infinite alternate;
+    animation: yellowGlow .5s ease-in-out infinite alternate;
+}
+
+@keyframes yellowGlow {
+    from {       
+        background: #C29E05;
+    }
+    to {
+        background: #F3D44E;    
+    }
+}
+
 #blue {
     background: #094a8f;
+}
+
+.blue-glow {
+    -webkit-animation: blueGlow .5s ease-in-out infinite alternate;
+    -moz-animation: blueGlow .5s ease-in-out infinite alternate;
+    animation: blueGlow .5s ease-in-out infinite alternate;
+}
+
+@keyframes blueGlow {
+    from {       
+        background: #094a8f;
+    }
+    to {
+        background: #2F83DD;    
+    }
 }
 
 
