@@ -6,19 +6,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {  
+  stepCount = 0;
 
     private startGame(event) {
-      var stepCount = 0;
       //create random number between 0-3
       var randomNum = this.getRandomNumber(4);
       //match up that number to a color and light up the color square in ui
-      this.glow(randomNum);
+      this.assignColor(randomNum);
       //save random num in array
       var randomPattern = [];
       randomPattern.push(randomNum);      
       //increment step count - pattern count 
-      stepCount++;
-
+      this.stepCount++;
+      this.displayStepCount(this.stepCount);
       //allow user to match pattern - save user pattern in variable
       //compare values
       //if values === continue - increment step count - increment pattern count
@@ -29,7 +29,7 @@ export class AppComponent {
       return Math.floor(Math.random() * max) + 1;
     }
 
-    private glow(randomNum:number) {
+    private assignColor(randomNum:number) {
       var color = '';
       var element;
 
@@ -47,11 +47,23 @@ export class AppComponent {
           color = 'blue';
           break;
       }
-      element = window.document.querySelector('#' + color)
+
+      this.glow(color);
+            
+    }
+
+    private glow(color:string) {
+      var element = window.document.querySelector('#' + color)
       element.className = 'item ' + color + '-glow';
+
       setTimeout(function() {
         element.className = 'item';
       }, 1000);
-      
+    }
+
+    private displayStepCount(stepCount:number) {
+      var stepCountElement = window.document.querySelector('#count');
+      stepCountElement.textContent = String(stepCount);
     }
 }
+
