@@ -10,14 +10,32 @@ export class AppComponent {
   randomNum = 0;
   userPattern = [];
   randomPattern = [];
+  colorPattern = [];
 
     private startGame() {      
         this.randomNum = this.getRandomNumber(4);
         var color = this.assignColor(this.randomNum);
+        this.colorPattern.push(color);
         this.glow(color);   
         this.randomPattern.push(this.randomNum);
-        this.stepCount++;
-        this.displayStepCount(this.stepCount);               
+                      
+    }
+
+    private takeNextTurn(userPattern:number[], randomPattern:number[]) {      
+      this.stepCount++;
+      this.displayStepCount(this.stepCount); 
+
+      var randomNum = this.getRandomNumber(4)
+      randomPattern.push(randomNum);
+      var color = this.assignColor(randomNum);
+      this.colorPattern.push(color);
+      var that = this;
+
+      this.colorPattern.forEach(element => {
+        setTimeout(function() {
+          that.glow(element);
+        }, 1000);        
+      });
     }
 
     private getRandomNumber(max:number) {
@@ -42,7 +60,9 @@ export class AppComponent {
       var id = this.assignId(event.target.id);
       this.userPattern.push(id);
 
-      this.hasCorrectPattern(this.userPattern, this.randomPattern);
+      if (this.userPattern.length === this.randomPattern.length) {
+        this.hasCorrectPattern(this.userPattern, this.randomPattern);
+      }      
     }
 
     private assignColor(randomNum:number) {
@@ -92,12 +112,12 @@ export class AppComponent {
       var randomPatternStr = randomPattern.toString();
 
       if (userPatternStr === randomPatternStr) {
-        this.startGame();
+        this.takeNextTurn(userPattern, randomPattern);
       }
       else {
         alert('You Lost!');
       }      
     }
-    
+
 }
 
