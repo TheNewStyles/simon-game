@@ -7,28 +7,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {  
   stepCount = 0;
+  randomNum = 0;
   userPattern = [];
+  randomPattern = [];
 
-    private startGame(event) {
-      //create random number between 0-3
-      var randomNum = this.getRandomNumber(4);
-      //match up that number to a color and light up the color square in ui
-      var color = this.assignColor(randomNum);
-      this.glow(color);
-      //save random num in array
-      var randomPattern = [];
-      randomPattern.push(randomNum);      
-      //increment step count - pattern count 
-      this.stepCount++;
-      this.displayStepCount(this.stepCount);
-      //Save user pattern in variable      
-      //Allow user to match pattern 
-      //compare values
-      //if values === continue - increment step count - increment pattern count
-        //else reset pattern count - step count remains (strict will be different)
-      if (!this.hasCorrectPattern(this.userPattern, randomPattern)) {
-        //exit game - else keep playing
-      }      
+    private startGame() {      
+        this.randomNum = this.getRandomNumber(4);
+        var color = this.assignColor(this.randomNum);
+        this.glow(color);   
+        this.randomPattern.push(this.randomNum);
+        this.stepCount++;
+        this.displayStepCount(this.stepCount);               
     }
 
     private getRandomNumber(max:number) {
@@ -52,6 +41,8 @@ export class AppComponent {
     private recordUserPattern(event) {
       var id = this.assignId(event.target.id);
       this.userPattern.push(id);
+
+      this.hasCorrectPattern(this.userPattern, this.randomPattern);
     }
 
     private assignColor(randomNum:number) {
@@ -97,7 +88,16 @@ export class AppComponent {
     }
 
     private hasCorrectPattern(userPattern:number[], randomPattern:number[]) {
-      //compare arrays if the same return true else false      
+      var userPatternStr = userPattern.toString();
+      var randomPatternStr = randomPattern.toString();
+
+      if (userPatternStr === randomPatternStr) {
+        this.startGame();
+      }
+      else {
+        alert('You Lost!');
+      }      
     }
+    
 }
 
