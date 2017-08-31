@@ -21,19 +21,21 @@ export class AppComponent {
     }
 
     private takeNextTurn(userPattern:number[], randomPattern:number[]) {      
-      this.updateStepCount();
+      this.updateStepCount();     
 
       var randomNum = this.getRandomNumber(4)
       randomPattern.push(randomNum);
       var color = this.assignColor(randomNum);
       this.colorPattern.push(color);
-      var that = this;      
-
+      var that = this;   
+        
+      this.wait(1000);
       for (let i = 0; i < this.colorPattern.length; i++) {
         setTimeout( function timer(){
           that.glow(that.colorPattern[i]);
         }, i*1000 );
       }
+      
     }
 
     private updateStepCount() {
@@ -46,22 +48,24 @@ export class AppComponent {
     }    
 
     private glow(color:string) {
-      console.log("glowing " + color);
       var element = window.document.querySelector('#' + color)
       element.className = 'item ' + color + '-glow';
 
       setTimeout(function() {
         element.className = 'item';
-      }, 1000);
+      }, 700);
     }
 
     private displayStepCount(stepCount:number) {
-      var stepCountElement = window.document.querySelector('#count');
-      stepCountElement.textContent = String(stepCount);
+      var stepCountElement = window.document.querySelector('#count-text');
+      stepCountElement.textContent = String("0"+stepCount);
     }
 
     private recordUserPattern(event) {
       var id = this.assignId(event.target.id);
+      var color = this.assignColor(id);
+      this.glow(color);
+
       this.userPattern.push(id);
 
       if (this.userPattern.length === this.randomPattern.length) {
@@ -115,7 +119,7 @@ export class AppComponent {
       var userPatternStr = userPattern.toString();
       var randomPatternStr = randomPattern.toString();
 
-      if (userPatternStr === randomPatternStr) {
+      if (userPatternStr === randomPatternStr) {        
         this.takeNextTurn(userPattern, randomPattern);
         this.userPattern = [];
       }
@@ -123,6 +127,14 @@ export class AppComponent {
         alert('You Lost!');
       }      
     }
+
+    private wait(ms){
+      var start = new Date().getTime();
+      var end = start;
+      while(end < start + ms) {
+        end = new Date().getTime();
+     }
+   }
 
 }
 
