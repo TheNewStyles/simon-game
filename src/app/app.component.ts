@@ -21,21 +21,24 @@ export class AppComponent {
     }
 
     private takeNextTurn(userPattern:number[], randomPattern:number[]) {      
-      this.stepCount++;
-      this.displayStepCount(this.stepCount); 
+      this.updateStepCount();
 
       var randomNum = this.getRandomNumber(4)
       randomPattern.push(randomNum);
       var color = this.assignColor(randomNum);
       this.colorPattern.push(color);
-      var that = this;
+      var that = this;      
 
-      for (var index = 0; index < this.colorPattern.length; index++) {
-        var element = this.colorPattern[index];
-        //setTimeout(function() {
-          that.glow(element);
-        //}, 1000);          
-      }               
+      for (let i = 0; i < this.colorPattern.length; i++) {
+        setTimeout( function timer(){
+          that.glow(that.colorPattern[i]);
+        }, i*1000 );
+      }
+    }
+
+    private updateStepCount() {
+      this.stepCount++;
+      this.displayStepCount(this.stepCount); 
     }
 
     private getRandomNumber(max:number) {
@@ -43,6 +46,7 @@ export class AppComponent {
     }    
 
     private glow(color:string) {
+      console.log("glowing " + color);
       var element = window.document.querySelector('#' + color)
       element.className = 'item ' + color + '-glow';
 
@@ -57,9 +61,6 @@ export class AppComponent {
     }
 
     private recordUserPattern(event) {
-      //TODO only clear this if new turn else keep adding
-      this.userPattern = [];
-
       var id = this.assignId(event.target.id);
       this.userPattern.push(id);
 
@@ -116,6 +117,7 @@ export class AppComponent {
 
       if (userPatternStr === randomPatternStr) {
         this.takeNextTurn(userPattern, randomPattern);
+        this.userPattern = [];
       }
       else {
         alert('You Lost!');
