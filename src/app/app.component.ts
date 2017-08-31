@@ -11,8 +11,16 @@ export class AppComponent {
   userPattern = [];
   randomPattern = [];
   colorPattern = [];
+  isOn = false;
 
-    private startGame() {      
+    //need to figure disable/enable buttons
+    //if -- set to zero else set to --
+    private turnOn() {
+      this.isOn ? true : false;
+      this.displayStepCount(0);
+    }
+
+    private start() {      
         this.randomNum = this.getRandomNumber(4);
         var color = this.assignColor(this.randomNum);
         this.colorPattern.push(color);
@@ -21,8 +29,7 @@ export class AppComponent {
     }
 
     private takeNextTurn(userPattern:number[], randomPattern:number[]) {      
-      this.updateStepCount();     
-
+      this.updateStepCount();
       var randomNum = this.getRandomNumber(4)
       randomPattern.push(randomNum);
       var color = this.assignColor(randomNum);
@@ -35,7 +42,6 @@ export class AppComponent {
           that.glow(that.colorPattern[i]);
         }, i*1000 );
       }
-      
     }
 
     private updateStepCount() {
@@ -48,12 +54,12 @@ export class AppComponent {
     }    
 
     private glow(color:string) {
-      var element = window.document.querySelector('#' + color)
+      var element = window.document.querySelector('#' + color);
       element.className = 'item ' + color + '-glow';
-
+      
       setTimeout(function() {
         element.className = 'item';
-      }, 700);
+      }, 600);
     }
 
     private displayStepCount(stepCount:number) {
@@ -63,10 +69,10 @@ export class AppComponent {
 
     private recordUserPattern(event) {
       var id = this.assignId(event.target.id);
-      var color = this.assignColor(id);
-      this.glow(color);
-
       this.userPattern.push(id);
+      var color = this.assignColor(id);
+      
+      this.glow(color);      
 
       if (this.userPattern.length === this.randomPattern.length) {
         this.hasCorrectPattern(this.userPattern, this.randomPattern);
