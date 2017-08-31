@@ -17,8 +17,7 @@ export class AppComponent {
         var color = this.assignColor(this.randomNum);
         this.colorPattern.push(color);
         this.glow(color);   
-        this.randomPattern.push(this.randomNum);
-                      
+        this.randomPattern.push(this.randomNum);                      
     }
 
     private takeNextTurn(userPattern:number[], randomPattern:number[]) {      
@@ -31,11 +30,12 @@ export class AppComponent {
       this.colorPattern.push(color);
       var that = this;
 
-      this.colorPattern.forEach(element => {
-        setTimeout(function() {
+      for (var index = 0; index < this.colorPattern.length; index++) {
+        var element = this.colorPattern[index];
+        //setTimeout(function() {
           that.glow(element);
-        }, 1000);        
-      });
+        //}, 1000);          
+      }               
     }
 
     private getRandomNumber(max:number) {
@@ -57,12 +57,15 @@ export class AppComponent {
     }
 
     private recordUserPattern(event) {
+      //TODO only clear this if new turn else keep adding
+      this.userPattern = [];
+
       var id = this.assignId(event.target.id);
       this.userPattern.push(id);
 
       if (this.userPattern.length === this.randomPattern.length) {
         this.hasCorrectPattern(this.userPattern, this.randomPattern);
-      }      
+        }       
     }
 
     private assignColor(randomNum:number) {
