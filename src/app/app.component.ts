@@ -13,11 +13,17 @@ export class AppComponent {
   colorPattern = [];
   isOn = false;
 
-    //need to figure disable/enable buttons
-    //if -- set to zero else set to --
     private turnOn() {
-      this.isOn ? true : false;
-      this.displayStepCount(0);
+      this.isOn = this.isOn ? false : true;
+      var stepCountElement = window.document.querySelector('#count-text');
+      
+      this.isOn ? stepCountElement.className = 'count-glow': stepCountElement.className = '';
+
+      // if (this.isOn) {
+      //   stepCountElement.className = 'count-glow'; 
+      // } else {
+      //   stepCountElement.className = '';
+      // }    
     }
 
     private start() {      
@@ -62,7 +68,7 @@ export class AppComponent {
       }, 600);
     }
 
-    private displayStepCount(stepCount:number) {
+    private displayStepCount(stepCount) {
       var stepCountElement = window.document.querySelector('#count-text');
       stepCountElement.textContent = String("0"+stepCount);
     }

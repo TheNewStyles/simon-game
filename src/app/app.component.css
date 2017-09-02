@@ -53,8 +53,12 @@
     font-size: .5em;  
     text-align: center;
     border: 4px solid #222; 
-    color: rgba(187, 4, 4, 0.82);   
+    color: rgba(96, 5, 5, 0.65);   
     font-family: 'Orbitron', sans-serif;
+}
+
+.count-glow {
+    color: rgba(187, 4, 4, 0.92); 
 }
 
 #count div {
