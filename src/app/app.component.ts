@@ -15,15 +15,8 @@ export class AppComponent {
 
     private turnOn() {
       this.isOn = this.isOn ? false : true;
-      var stepCountElement = window.document.querySelector('#count-text');
-      
+      var stepCountElement = window.document.querySelector('#count-text');      
       this.isOn ? stepCountElement.className = 'count-glow': stepCountElement.className = '';
-
-      // if (this.isOn) {
-      //   stepCountElement.className = 'count-glow'; 
-      // } else {
-      //   stepCountElement.className = '';
-      // }    
     }
 
     private start() {      
