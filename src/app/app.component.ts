@@ -12,19 +12,35 @@ export class AppComponent {
   randomPattern = [];
   colorPattern = [];
   isOn = false;
+  
 
-    private turnOn() {
+    private turnOnOff() {
       this.isOn = this.isOn ? false : true;
-      var stepCountElement = window.document.querySelector('#count-text');      
+      var stepCountElement = window.document.querySelector('#count-text');   
+      stepCountElement.textContent = "--";  
       this.isOn ? stepCountElement.className = 'count-glow': stepCountElement.className = '';
+
+      this.reset();
     }
 
-    private start() {      
-        this.randomNum = this.getRandomNumber(4);
-        var color = this.assignColor(this.randomNum);
-        this.colorPattern.push(color);
-        this.glow(color);   
-        this.randomPattern.push(this.randomNum);                      
+    private reset() {
+      this.stepCount = 0;
+      this.randomNum = 0;
+      this.userPattern = [];
+      this.randomPattern = [];
+      this.colorPattern = [];      
+    }
+
+    private start() {   
+      if (!this.isOn) {
+        return;
+      }       
+      
+      this.randomNum = this.getRandomNumber(4);
+      var color = this.assignColor(this.randomNum);
+      this.colorPattern.push(color);      
+      this.glow(color);   
+      this.randomPattern.push(this.randomNum);                      
     }
 
     private takeNextTurn(userPattern:number[], randomPattern:number[]) {      
@@ -35,7 +51,7 @@ export class AppComponent {
       this.colorPattern.push(color);
       var that = this;   
         
-      this.wait(1000);
+      this.wait(1250);
       for (let i = 0; i < this.colorPattern.length; i++) {
         setTimeout( function timer(){
           that.glow(that.colorPattern[i]);
@@ -67,15 +83,22 @@ export class AppComponent {
     }
 
     private recordUserPattern(event) {
+      if (!this.isOn) {
+        return;
+      }  
+
       var id = this.assignId(event.target.id);
       this.userPattern.push(id);
       var color = this.assignColor(id);
+      var that = this;
       
-      this.glow(color);      
+      this.glow(color);   
 
       if (this.userPattern.length === this.randomPattern.length) {
-        this.hasCorrectPattern(this.userPattern, this.randomPattern);
-        }       
+        setTimeout(function() {
+         that.hasCorrectPattern(that.userPattern, that.randomPattern);
+        }, 600);
+      }       
     }
 
     private assignColor(randomNum:number) {
@@ -124,7 +147,7 @@ export class AppComponent {
       var userPatternStr = userPattern.toString();
       var randomPatternStr = randomPattern.toString();
 
-      if (userPatternStr === randomPatternStr) {        
+      if (userPatternStr === randomPatternStr) {       
         this.takeNextTurn(userPattern, randomPattern);
         this.userPattern = [];
       }
@@ -133,7 +156,7 @@ export class AppComponent {
       }      
     }
 
-    private wait(ms){
+    private wait(ms:number){
       var start = new Date().getTime();
       var end = start;
       while(end < start + ms) {

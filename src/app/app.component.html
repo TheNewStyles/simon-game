@@ -1,9 +1,22 @@
+<div id="behind"></div>
 <div id="config">
-  SIMON
+  <h1>Simon</h1>  
   <div class="container-button">
-    <button (click)="start()" [disabled]="!isOn" class="item-button">START</button>
-    <button class="item-button" [disabled]="!isOn">STRICT</button>
-    <button (click)="turnOn()" class="item-button" >ON/OFF</button>
+    <div>
+        <button (click)="start()" class="item-button" id="start"></button>
+        <h4 class="label">START</h4>
+    </div>
+    <div>
+        <button class="item-button" id="strict"></button>
+        <h4 class="label">STRICT</h4>
+    </div>
+    <div>
+        <label class="switch" >
+            <input type="checkbox" (click)="turnOnOff()">
+            <span class="slider"></span>
+        </label>
+        <h4 class="label">ON/OFF</h4>
+    </div>
   </div>
   <div class="container-button">
     <div class="item-button" id="count">
@@ -11,6 +24,7 @@
     </div>  
   </div>
 </div>
+
 
 <div class="container">
   <div (click)="recordUserPattern($event)"  class="item" id="green"></div>
