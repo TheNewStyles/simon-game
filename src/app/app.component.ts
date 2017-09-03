@@ -12,13 +12,16 @@ export class AppComponent {
   randomPattern = [];
   colorPattern = [];
   isOn = false;
+  isStrict = false;
   
 
     private turnOnOff() {
       this.isOn = this.isOn ? false : true;
       var stepCountElement = window.document.querySelector('#count-text');   
       stepCountElement.textContent = "--";  
-      this.isOn ? stepCountElement.className = 'count-glow': stepCountElement.className = '';
+      this.isOn ? 
+        stepCountElement.className = 'count-glow'
+        : stepCountElement.className = '';
 
       this.reset();
     }
@@ -39,7 +42,8 @@ export class AppComponent {
       this.randomNum = this.getRandomNumber(4);
       var color = this.assignColor(this.randomNum);
       this.colorPattern.push(color);      
-      this.glow(color);   
+      this.glow(color);  
+      this.playAudio(color); 
       this.randomPattern.push(this.randomNum);                      
     }
 
@@ -55,8 +59,13 @@ export class AppComponent {
       for (let i = 0; i < this.colorPattern.length; i++) {
         setTimeout( function timer(){
           that.glow(that.colorPattern[i]);
+          that.playAudio(that.colorPattern[i]);       
         }, i*1000 );
       }
+    }
+
+    private turnOnStrict() {
+      this.isStrict = this.isStrict ? false : true;
     }
 
     private updateStepCount() {
@@ -77,9 +86,33 @@ export class AppComponent {
       }, 600);
     }
 
+    private playAudio(color:string) {
+      var green = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"); 
+      var red = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"); 
+      var yellow = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"); 
+      var blue = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"); 
+
+      switch (color) {        
+        case 'green':
+          green.play();
+          break;
+        case 'red':
+          red.play();
+          break;
+        case 'yellow':
+          yellow.play();
+          break;
+        case 'blue':
+          blue.play();
+          break;
+      }
+    }
+
     private displayStepCount(stepCount) {
       var stepCountElement = window.document.querySelector('#count-text');
-      stepCountElement.textContent = String("0"+stepCount);
+      stepCount <= 9 ? 
+        stepCountElement.textContent = String("0"+stepCount) 
+        : stepCountElement.textContent = String(stepCount);
     }
 
     private recordUserPattern(event) {
@@ -92,7 +125,8 @@ export class AppComponent {
       var color = this.assignColor(id);
       var that = this;
       
-      this.glow(color);   
+      this.glow(color);  
+      this.playAudio(color); 
 
       if (this.userPattern.length === this.randomPattern.length) {
         setTimeout(function() {
@@ -152,8 +186,46 @@ export class AppComponent {
         this.userPattern = [];
       }
       else {
-        alert('You Lost!');
+        if (!this.isStrict) {
+          this.incorrectPattern(userPattern, randomPattern);       
+          var that = this;  
+          this.stepCount = this.stepCount - 1;
+          this.userPattern = [];
+          setTimeout(function() {
+            that.takeNextTurn(userPattern, randomPattern)
+          }, 1000);
+        } else {   
+          //TODO bug in strict mode step count       
+          this.strictIncorrectPattern();
+          var that = this;
+          setTimeout(function() {
+            that.start();
+          }, 1000);
+        }      
       }      
+    }
+
+    private incorrectPattern(userPattern:number[], randomPattern:number[]) {
+      var stepCountElement = window.document.querySelector('#count-text');
+      stepCountElement.textContent = '!!';
+      var that = this;
+
+      setTimeout(function() {
+        that.stepCount > 9 ? 
+          stepCountElement.textContent = that.stepCount.toString() 
+          : stepCountElement.textContent = '0' + that.stepCount;
+      }, 1000); 
+    }
+
+    private strictIncorrectPattern() {
+      var stepCountElement = window.document.querySelector('#count-text');
+      stepCountElement.textContent = "!!";
+
+      this.reset();
+
+      setTimeout(function() {
+        stepCountElement.textContent = "00";
+      }, 1000);    
     }
 
     private wait(ms:number){

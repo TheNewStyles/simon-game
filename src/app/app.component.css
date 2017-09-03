@@ -19,6 +19,10 @@
     justify-content: space-around;
 }
 
+.container-button div {
+    width: 60px;
+}
+
 .item-button {
     margin-top: 0px;
     font-size: .18em;
@@ -127,7 +131,7 @@ button:focus {outline:0;}
     position: absolute;
     content: "";
     height: 17px;
-    width: 17px;
+    width: 26px;
     left: 4px;
     bottom: 4px;
     background-color: #52C1FC;
@@ -136,9 +140,9 @@ button:focus {outline:0;}
   }
   
   input:checked + .slider:before {
-    -webkit-transform: translateX(35px);
-    -ms-transform: translateX(35px);
-    transform: translateX(35px);
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
   }
 
 /* color divs and glow */
