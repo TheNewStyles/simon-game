@@ -12,8 +12,7 @@ export class AppComponent {
   randomPattern = [];
   colorPattern = [];
   isOn = false;
-  isStrict = false;
-  
+  isStrict = false;  
 
     private turnOnOff() {
       this.isOn = this.isOn ? false : true;
@@ -128,11 +127,23 @@ export class AppComponent {
       this.glow(color);  
       this.playAudio(color); 
 
+      if (this.userPattern.length >= 20) {
+        this.displayWinner();
+        return;
+      }
+
       if (this.userPattern.length === this.randomPattern.length) {
         setTimeout(function() {
          that.hasCorrectPattern(that.userPattern, that.randomPattern);
         }, 600);
       }       
+    }
+
+    private displayWinner() {
+      this.reset();
+      var stepCountElement = window.document.querySelector('#count-text');
+      stepCountElement.textContent = "00";
+      alert("Congrats! You have won!");
     }
 
     private assignColor(randomNum:number) {
@@ -234,7 +245,7 @@ export class AppComponent {
       while(end < start + ms) {
         end = new Date().getTime();
      }
-   }
+    }
 
 }
 
