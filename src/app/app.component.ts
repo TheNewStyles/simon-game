@@ -13,6 +13,7 @@ export class AppComponent {
   colorPattern = [];
   isOn = false;
   isStrict = false;  
+  isRetry = false;
 
     private turnOnOff() {
       this.isOn = this.isOn ? false : true;
@@ -48,13 +49,17 @@ export class AppComponent {
 
     private takeNextTurn(userPattern:number[], randomPattern:number[]) {      
       this.updateStepCount();
-      var randomNum = this.getRandomNumber(4)
-      randomPattern.push(randomNum);
-      var color = this.assignColor(randomNum);
-      this.colorPattern.push(color);
-      var that = this;   
+      var that = this; 
+
+      if (!this.isRetry) {
+        var randomNum = this.getRandomNumber(4)
+        randomPattern.push(randomNum);
+        var color = this.assignColor(randomNum);
+        this.colorPattern.push(color);
+      }        
         
       this.wait(1250);
+      this.isRetry = false;
       for (let i = 0; i < this.colorPattern.length; i++) {
         setTimeout( function timer(){
           that.glow(that.colorPattern[i]);
@@ -65,6 +70,10 @@ export class AppComponent {
 
     private turnOnStrict() {
       this.isStrict = this.isStrict ? false : true;
+      var strict = window.document.querySelector('#strict');
+      
+      this.isStrict ? strict.className = 'item-button ' + 'strict-glow'
+                    : strict.className = 'item-button';
     }
 
     private updateStepCount() {
@@ -104,6 +113,12 @@ export class AppComponent {
         case 'blue':
           blue.play();
           break;
+        case 'lost':
+          green.play();
+          red.play();
+          yellow.play();
+          blue.play();
+          break;
       }
     }
 
@@ -132,9 +147,10 @@ export class AppComponent {
         return;
       }
 
+      //TODO CHECK ON EVERY STEP NOT JUST AT FINAL
       if (this.userPattern.length === this.randomPattern.length) {
         setTimeout(function() {
-         that.hasCorrectPattern(that.userPattern, that.randomPattern);
+         that.checkPattern(that.userPattern, that.randomPattern);
         }, 600);
       }       
     }
@@ -188,7 +204,7 @@ export class AppComponent {
       return id;                
     }
 
-    private hasCorrectPattern(userPattern:number[], randomPattern:number[]) {
+    private checkPattern(userPattern:number[], randomPattern:number[]) {
       var userPatternStr = userPattern.toString();
       var randomPatternStr = randomPattern.toString();
 
@@ -198,17 +214,14 @@ export class AppComponent {
       }
       else {
         if (!this.isStrict) {
-          this.incorrectPattern(userPattern, randomPattern);       
-          var that = this;  
-          this.stepCount = this.stepCount - 1;
-          this.userPattern = [];
+          var that = this;          
+          this.incorrectPattern(); 
           setTimeout(function() {
             that.takeNextTurn(userPattern, randomPattern)
-          }, 1000);
-        } else {   
-          //TODO bug in strict mode step count       
-          this.strictIncorrectPattern();
-          var that = this;
+          }, 1000);  
+        } else {
+          var that = this;     
+          this.strictIncorrectPattern();          
           setTimeout(function() {
             that.start();
           }, 1000);
@@ -216,7 +229,11 @@ export class AppComponent {
       }      
     }
 
-    private incorrectPattern(userPattern:number[], randomPattern:number[]) {
+    private incorrectPattern() {
+      this.playAudio('lost');
+      this.isRetry = true;
+      this.userPattern = [];
+      this.stepCount = this.stepCount - 1;
       var stepCountElement = window.document.querySelector('#count-text');
       stepCountElement.textContent = '!!';
       var that = this;
@@ -229,6 +246,7 @@ export class AppComponent {
     }
 
     private strictIncorrectPattern() {
+      this.playAudio('lost');
       var stepCountElement = window.document.querySelector('#count-text');
       stepCountElement.textContent = "!!";
 
