@@ -26,7 +26,7 @@ export class AppComponent {
       this.reset();
     }
 
-    private reset() {
+    public reset() {
       this.stepCount = 0;
       this.randomNum = 0;
       this.userPattern = [];
