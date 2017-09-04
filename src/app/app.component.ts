@@ -15,7 +15,7 @@ export class AppComponent {
   isStrict = false;  
   isRetry = false;
 
-    private turnOnOff() {
+    public turnOnOff() {
       this.isOn = this.isOn ? false : true;
       var stepCountElement = window.document.querySelector('#count-text');   
       stepCountElement.textContent = "--";  
@@ -34,7 +34,7 @@ export class AppComponent {
       this.colorPattern = [];      
     }
 
-    private start() {   
+    public start() {   
       if (!this.isOn) {
         return;
       }       
@@ -68,7 +68,7 @@ export class AppComponent {
       }
     }
 
-    private turnOnStrict() {
+    public turnOnStrict() {
       this.isStrict = this.isStrict ? false : true;
       var strict = window.document.querySelector('#strict');
       
@@ -129,7 +129,7 @@ export class AppComponent {
         : stepCountElement.textContent = String(stepCount);
     }
 
-    private recordUserPattern(event) {
+    public recordUserPattern(event) {
       if (!this.isOn) {
         return;
       }  
