@@ -6,14 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {  
-  stepCount = 0;
-  randomNum = 0;
-  userPattern = [];
-  randomPattern = [];
-  colorPattern = [];
-  isOn = false;
-  isStrict = false;  
-  isRetry = false;
+  private stepCount = 0;
+  private randomNum = 0;
+  private userPattern = [];
+  private randomPattern = [];
+  private colorPattern = [];
+  private isOn = false;
+  private isStrict = false;  
+  private isRetry = false;
 
     public turnOnOff() {
       this.isOn = this.isOn ? false : true;
@@ -35,7 +35,7 @@ export class AppComponent {
     }
 
     public start() {   
-      if (!this.isOn) {
+      if (!this.isOn || this.stepCount >= 1) {
         return;
       }       
       
@@ -45,6 +45,44 @@ export class AppComponent {
       this.glow(color);  
       this.playAudio(color); 
       this.randomPattern.push(this.randomNum);                      
+    }
+
+    public recordUserPattern(event) {
+      if (!this.isOn) {
+        return;
+      }  
+
+      var id = this.assignId(event.target.id);
+      this.userPattern.push(id);
+      var color = this.assignColor(id);
+      var that = this;
+      
+      this.glow(color);  
+      this.playAudio(color); 
+
+      if (this.userPattern.length >= 20) {
+        this.displayWinner();
+        return;
+      }
+
+      //TODO CHECK ON EVERY STEP NOT JUST AT FINAL
+      if (this.userPattern.length === this.randomPattern.length) {
+        setTimeout(function() {
+         that.checkPattern(that.userPattern, that.randomPattern);
+        }, 600);
+      }       
+    }
+
+    public turnOnStrict() {
+      if (this.stepCount >= 1) {
+        return;
+      }
+
+      this.isStrict = this.isStrict ? false : true;
+      var strict = window.document.querySelector('#strict');
+      
+      this.isStrict ? strict.className = 'item-button ' + 'strict-glow'
+                    : strict.className = 'item-button';
     }
 
     private takeNextTurn(userPattern:number[], randomPattern:number[]) {      
@@ -66,15 +104,7 @@ export class AppComponent {
           that.playAudio(that.colorPattern[i]);       
         }, i*1000 );
       }
-    }
-
-    public turnOnStrict() {
-      this.isStrict = this.isStrict ? false : true;
-      var strict = window.document.querySelector('#strict');
-      
-      this.isStrict ? strict.className = 'item-button ' + 'strict-glow'
-                    : strict.className = 'item-button';
-    }
+    }    
 
     private updateStepCount() {
       this.stepCount++;
@@ -127,33 +157,7 @@ export class AppComponent {
       stepCount <= 9 ? 
         stepCountElement.textContent = String("0"+stepCount) 
         : stepCountElement.textContent = String(stepCount);
-    }
-
-    public recordUserPattern(event) {
-      if (!this.isOn) {
-        return;
-      }  
-
-      var id = this.assignId(event.target.id);
-      this.userPattern.push(id);
-      var color = this.assignColor(id);
-      var that = this;
-      
-      this.glow(color);  
-      this.playAudio(color); 
-
-      if (this.userPattern.length >= 20) {
-        this.displayWinner();
-        return;
-      }
-
-      //TODO CHECK ON EVERY STEP NOT JUST AT FINAL
-      if (this.userPattern.length === this.randomPattern.length) {
-        setTimeout(function() {
-         that.checkPattern(that.userPattern, that.randomPattern);
-        }, 600);
-      }       
-    }
+    }    
 
     private displayWinner() {
       this.reset();
