@@ -22,6 +22,10 @@ export class AppComponent {
       this.isOn ? 
         stepCountElement.className = 'count-glow'
         : stepCountElement.className = '';
+        
+      this.isStrict = false;
+      var strict = window.document.querySelector('#strict');     
+      strict.className = 'item-button';
 
       this.reset();
     }
