@@ -74,7 +74,7 @@ export class AppComponent {
     }
 
     public turnOnStrict() {
-      if (this.stepCount >= 1) {
+      if (!this.isOn || this.stepCount >= 1) {
         return;
       }
 
